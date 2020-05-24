@@ -41,7 +41,7 @@ module.exports = NodeHelper.create({
                 }
                 nirvanaAPI.getData(response.token, null, function (data) {
                     if (me.debug) {
-                        me.log("Got data:" + JSON.stringify(data));
+                        me.log("Got data");
                     }
                     if (data.error) {
                         me.error(data.error);
