@@ -24,13 +24,18 @@ var nirvanaAPI = {
             try {
                 if (success) {
                     var data = me.parseDataResult(dataString);
+                    try{
                     callback(data);
-                    return;
+                    }catch(e){
+                       callback({ error: 'GETDATA_CALLBACK_FAILED', success: success, data: dataString });
+                    }
+                }else{
+                    callback({ error: 'GETDATA_FAILED', success: success, data: dataString });
                 }
             } catch (er) {
-                error = er.toString();
+                callback({ error: 'GETDATA_ERR', success: success, data: dataString, err: er });
             }
-            callback({ error: 'GETDATA_FAILED', success: success, data: dataString, err: error });
+        
         }, since);
     },
 
