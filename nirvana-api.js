@@ -1,3 +1,9 @@
+/* MMM-Nirvana
+ *
+ * By Jonatan Berggren - https://github.com/jberggren
+ * MIT Licensed.
+ */
+
 const https = require('https');
 
 var nirvanaAPI = {
@@ -7,8 +13,8 @@ var nirvanaAPI = {
             try {
                 if (success) {
                     var token = me.parseLoginResult(dataString);
-                    if (token != '') {
-                        callback({ token: token });
+                    if (token != null) {
+                        callback(token);
                         return;
                     }
                 }
@@ -24,33 +30,31 @@ var nirvanaAPI = {
             try {
                 if (success) {
                     var data = me.parseDataResult(dataString);
-                    try{
-                    callback(data);
-                    }catch(e){
-                       callback({ error: 'GETDATA_CALLBACK_FAILED', success: success, data: dataString });
+                    try {
+                        callback(data);
+                    } catch (e) {
+                        callback({ error: 'GETDATA_CALLBACK_FAILED', success: success, data: dataString });
                     }
-                }else{
+                } else {
                     callback({ error: 'GETDATA_FAILED', success: success, data: dataString });
                 }
             } catch (er) {
                 callback({ error: 'GETDATA_ERR', success: success, data: dataString, err: er });
             }
-        
+
         }, since);
     },
 
     parseLoginResult: function (dataString) {
         var data = JSON.parse(dataString);
-        var token = '';
         if (data.results) {
             for (var i = 0; i < data.results.length; i++) {
                 if (data.results[i].auth) {
-                    token = data.results[i].auth.token;
-                    break;
+                    return { token: data.results[i].auth.token, expires: data.results[i].auth.expires*1000 };
                 }
             }
         }
-        return token;
+        return null;
     },
 
     parseDataResult: function (dataString) {
@@ -62,7 +66,7 @@ var nirvanaAPI = {
             for (var i = 0; i < data.results.length; i++) {
                 if (data.results[i].task) {
                     var task = data.results[i].task;
-                    var myTask = task; 
+                    var myTask = task;
                     if (task.type == this.TASK_TYPE.TASK) {
                         tasks.push(myTask);
                     } else if (task.type == this.TASK_TYPE.PROJECT) {
@@ -72,9 +76,9 @@ var nirvanaAPI = {
 
             }
             //setup parent projekt and project childs
-            for(var i=0;i<tasks.length;i++){
-                if(tasks[i].parentid != ""){
-                    tasks[i].project = projects.find(x=>x.id == tasks[i].parentid);
+            for (var i = 0; i < tasks.length; i++) {
+                if (tasks[i].parentid != "") {
+                    tasks[i].project = projects.find(x => x.id == tasks[i].parentid);
                 }
             }
         }
