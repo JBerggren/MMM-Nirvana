@@ -24,7 +24,7 @@ module.exports = NodeHelper.create({
         }
     },
 
-    getToken: function (callback) {
+    getToken: function () {
         var me = this;
         nirvanaAPI.authenticate(this.username, this.password, function (response) {
             if (me.debug) {
@@ -35,7 +35,7 @@ module.exports = NodeHelper.create({
                 return;
             }
             me.token = response;
-            callback();
+            me.getTasks();
         });
     },
 
