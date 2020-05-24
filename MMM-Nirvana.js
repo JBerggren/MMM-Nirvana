@@ -42,7 +42,7 @@ Module.register("MMM-Nirvana", {
         if(this.config.state){
             tasks = tasks.tasks.filter(x=>x.state == this.config.state);
         }
-        return tasks.sort((a,b)=>{
+        tasks= tasks.sort((a,b)=>{
             if(a.project == b.project){
                 return a.seq-b.seq;
             }
@@ -54,6 +54,8 @@ Module.register("MMM-Nirvana", {
             }
             return a.project.name.localeCompare(b.project.name);
         });
+        
+        return tasks.slice(0,this.config.numberOfTasks-1);
     },
 
     socketNotificationReceived: function (notification, payload) {
