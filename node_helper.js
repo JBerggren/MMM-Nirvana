@@ -31,7 +31,7 @@ module.exports = NodeHelper.create({
                     return;
                 }
                 nirvanaAPI.getData(response.token, null, function (data) {
-                    me.log("Got data", JSON.stringify(data));
+                    me.log("Got data:" + JSON.stringify(data));
                     var tasks = data.tasks;
                     if(tasks && tasks.length > this.numberOfTasks){
                         tasks = tasks.slice(0, this.numberOfTasks - 1);

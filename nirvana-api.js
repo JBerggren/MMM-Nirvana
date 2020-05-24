@@ -17,21 +17,23 @@ var nirvanaAPI = {
             callback({ error: 'AUTH_FAILED' });
         });
     },
-    getData: function (token,since,callback) {
+    getData: function (token, since, callback) {
         var me = this;
-        me.executeDataRequest(token,function(success,dataString){
+        var error = null;
+        me.executeDataRequest(token, function (success, dataString) {
             try {
                 if (success) {
-                    data = me.parseDataResult(dataString);
-                   callback(data);
+                    var data = me.parseDataResult(dataString);
+                    callback(data);
                 }
             } catch (er) {
+                error = er.toString();
             }
-            callback({ error: 'GETDATA_FAILED' });
-        },since);   
+            callback({ error: 'GETDATA_FAILED', success: success, data: dataString, err: error });
+        }, since);
     },
 
-    parseLoginResult: function(dataString) {
+    parseLoginResult: function (dataString) {
         var data = JSON.parse(dataString);
         var token = '';
         if (data.results) {
@@ -58,25 +60,25 @@ var nirvanaAPI = {
                         continue;
                     }
                     var myTask = { id: task.id, title: task.name, state: task.state, seq: task.seq }; //Get data we care about
-                    if (task.type == TASK_TYPE.TASK) {
+                    if (task.type == this.TASK_TYPE.TASK) {
                         tasks.push(myTask);
-                    } else if (task.type == TASK_TYPE.PROJECT) {
+                    } else if (task.type == this.TASK_TYPE.PROJECT) {
                         projects.push(myTask);
                     }
                 }
 
             }
-            tasks.sort(function(a,b){
-                return a.seq-b.seq;
+            tasks.sort(function (a, b) {
+                return a.seq - b.seq;
             });
-            projects.sort(function(a,b){
-                return a.seq-b.seq;
+            projects.sort(function (a, b) {
+                return a.seq - b.seq;
             });
         }
         return { tasks: tasks, projects: projects };
     },
 
-    executeDataRequest: function(token, callback, since) {
+    executeDataRequest: function (token, callback, since) {
         var options = {
             hostname: 'focus.nirvanahq.com',
             port: 443,
