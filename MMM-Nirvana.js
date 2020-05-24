@@ -40,7 +40,7 @@ Module.register("MMM-Nirvana", {
             tasks = tasks.filter(x=>{return x.project && x.project.name == this.config.project;});
         }
         if(this.config.state){
-            tasks = tasks.tasks.filter(x=>x.state == this.config.state);
+            tasks = tasks.filter(x=>x.state == this.config.state);
         }
         tasks= tasks.sort((a,b)=>{
             if(a.project == b.project){
