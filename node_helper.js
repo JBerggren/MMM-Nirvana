@@ -43,8 +43,8 @@ module.exports = NodeHelper.create({
                     if (me.debug) {
                         me.log("Got data:" + JSON.stringify(data));
                     }
-                    if (response.error) {
-                        me.error(response.error);
+                    if (data.error) {
+                        me.error(data.error);
                         return;
                     }
                     me.sendSocketNotification("TASK_DATA", data.tasks);
