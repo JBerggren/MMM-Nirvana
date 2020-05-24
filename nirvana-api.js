@@ -25,6 +25,7 @@ var nirvanaAPI = {
                 if (success) {
                     var data = me.parseDataResult(dataString);
                     callback(data);
+                    return;
                 }
             } catch (er) {
                 error = er.toString();

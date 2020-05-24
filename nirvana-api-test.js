@@ -3,6 +3,10 @@ var conf = require('./conf.js');
 
 nirvanaAPI.authenticate(conf.username,conf.password,function(response){
     nirvanaAPI.getData(response.token,null,function(data){
-        console.log(data);
+        if(data.error){
+            console.error(data.error,data.sucess,data.err);
+        }else{
+            console.info("OK", data.tasks);
+        }
     });
 });
