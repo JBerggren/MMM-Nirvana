@@ -55,7 +55,7 @@ Module.register("MMM-Nirvana", {
             return a.project.name.localeCompare(b.project.name);
         });
         
-        return tasks.slice(0,this.config.numberOfTasks-1);
+        return tasks.slice(0,this.config.numberOfTasks);
     },
 
     socketNotificationReceived: function (notification, payload) {
