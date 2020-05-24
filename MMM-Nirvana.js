@@ -6,7 +6,7 @@
 
 Module.register("MMM-Nirvana", {
     defaults: {
-        debug:true,
+        debug: true,
         username: '',
         password: '',
         numberOfTasks: 5,
@@ -23,58 +23,59 @@ Module.register("MMM-Nirvana", {
         RECURRING: 9,
         ACTIVE_PROJECT: 11*/
 
-        tag:null,
-        project:null,
-        state:null
+        tag: null,
+        project: null,
+        state: null
     },
 
     start: function () {
-        this.sendSocketNotification("INIT", {username:this.config.username,password:this.config.password,debug:this.config.debug});
+        this.sendSocketNotification("INIT", { username: this.config.username, password: this.config.password, debug: this.config.debug });
     },
 
-    filterAndSortTasks:function(tasks){
-        if(this.config.tag){
-            tasks = tasks.filter(x=>{return x.tags.indexOf("," + this.config.tag + ",") != -1;});
+    filterAndSortTasks: function (tasks) {
+        if (this.config.tag) {
+            var tagString = "," + this.config.tag + ",";
+            tasks = tasks.filter(x => { return x.tags.indexOf(tagString) != -1 || (x.project && x.project.tags.indexOf(tagString) != -1); });
         }
-        if(this.config.project){
-            tasks = tasks.filter(x=>{return x.project && x.project.name == this.config.project;});
+        if (this.config.project) {
+            tasks = tasks.filter(x => { return x.project && x.project.name == this.config.project; });
         }
-        if(this.config.state){
-            tasks = tasks.filter(x=>x.state == this.config.state);
+        if (this.config.state) {
+            tasks = tasks.filter(x => x.state == this.config.state);
         }
-        tasks= tasks.sort((a,b)=>{
-            if(a.project == b.project){
-                return a.seq-b.seq;
+        tasks = tasks.sort((a, b) => {
+            if (a.project == b.project) {
+                return a.seq - b.seq;
             }
-            if(!a.project){
+            if (!a.project) {
                 return -1;
             }
-            if(!b.project){
+            if (!b.project) {
                 return 1;
             }
             return a.project.name.localeCompare(b.project.name);
         });
-        
-        return tasks.slice(0,this.config.numberOfTasks);
+
+        return tasks.slice(0, this.config.numberOfTasks);
     },
 
     socketNotificationReceived: function (notification, payload) {
         if (notification == "TASK_DATA") {
             this.tasks = this.filterAndSortTasks(payload);
             this.updateDom();
-        }else if(notification == "ERROR"){
+        } else if (notification == "ERROR") {
             this.error = payload;
             console.error(payload);
             this.updateDom();
         }
-            else{
-            console.info("Msg from node_module",payload);
+        else {
+            console.info("Msg from node_module", payload);
         }
     },
 
     getDom: function () {
         var wrapperEl = this.createElement("nir-wrapper");
-        if(this.error){
+        if (this.error) {
             wrapperEl.innerText = "ERROR:" + this.error;
         }
         else if (this.tasks == null) {
