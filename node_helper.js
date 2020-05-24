@@ -33,7 +33,8 @@ module.exports = NodeHelper.create({
                 });
             });
         }catch(err) {
-            me.log("Something went wrong getting tasks",err);
+            me.log("Something went wrong getting tasks");
+            me.log(err.toString());
         }
       
     },

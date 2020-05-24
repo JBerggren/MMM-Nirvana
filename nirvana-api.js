@@ -2,10 +2,11 @@ const https = require('https');
 
 var nirvanaAPI = {
     authenticate: function (username, password, callback) {
+        var me = this;
         executeLoginRequest(username, password, function (success, dataString) {
             try {
                 if (success) {
-                    var token = this.parseLoginResult(dataString);
+                    var token = me.parseLoginResult(dataString);
                     if (token != '') {
                         callback({ token: token });
                         return;
@@ -17,10 +18,11 @@ var nirvanaAPI = {
         });
     },
     getData: function (token,since,callback) {
-        this.executeDataRequest(token,function(success,dataString){
+        var me = this;
+        me.executeDataRequest(token,function(success,dataString){
             try {
                 if (success) {
-                    data = this.parseDataResult(dataString);
+                    data = me.parseDataResult(dataString);
                    callback(data);
                 }
             } catch (er) {
@@ -29,7 +31,7 @@ var nirvanaAPI = {
         },since);   
     },
 
-    parseLoginResult(dataString) {
+    parseLoginResult: function(dataString) {
         var data = JSON.parse(dataString);
         var token = '';
         if (data.results) {
@@ -42,6 +44,7 @@ var nirvanaAPI = {
         }
         return token;
     },
+
     parseDataResult: function (dataString) {
         var tasks = [];
         var projects = [];
@@ -73,7 +76,7 @@ var nirvanaAPI = {
         return { tasks: tasks, projects: projects };
     },
 
-    executeDataRequest(token, callback, since) {
+    executeDataRequest: function(token, callback, since) {
         var options = {
             hostname: 'focus.nirvanahq.com',
             port: 443,
