@@ -74,14 +74,7 @@ var nirvanaAPI = {
             //setup parent projekt and project childs
             for(var i=0;i<tasks.length;i++){
                 if(tasks[i].parentid != ""){
-                    var project = projects.find(x=>x.id == tasks[i].parentid);
-                    if(project){
-                        tasks[i].project = project;
-                        if(project.tasks== null){
-                            project.tasks = [];
-                        }
-                        project.tasks.push(tasks[i]);
-                    }
+                    tasks[i].project = projects.find(x=>x.id == tasks[i].parentid);
                 }
             }
         }
