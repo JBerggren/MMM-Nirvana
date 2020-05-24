@@ -22,14 +22,20 @@ module.exports = NodeHelper.create({
 
     getTasks: function () {
         var me = this;
-        nirvanaAPI.authenticate(this.username, this.password, function (token) {
-            me.log("Got token " + token);
-            nirvanaAPI.getData(token, null, function (data) {
-                me.log("Got data", JSON.stringify(data));
-                var tasks = data.tasks.slice(0, this.numberOfTasks - 1);
-                me.sendSocketNotification("TASK_DATA", tasks);
+        me.log("Getting tasks");
+        try{
+            nirvanaAPI.authenticate(this.username, this.password, function (token) {
+                me.log("Got token " + token);
+                nirvanaAPI.getData(token, null, function (data) {
+                    me.log("Got data", JSON.stringify(data));
+                    var tasks = data.tasks.slice(0, this.numberOfTasks - 1);
+                    me.sendSocketNotification("TASK_DATA", tasks);
+                });
             });
-        });
+        }catch(err) {
+            me.log("Something went wrong getting tasks",err);
+        }
+      
     },
 
     log:function(data){
