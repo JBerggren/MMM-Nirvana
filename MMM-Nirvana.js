@@ -45,5 +45,6 @@ Module.register("MMM-Nirvana", {
     createElement: function (className) {
         var el = document.createElement("div");
         el.className = className;
+        return el;
     }
 });
