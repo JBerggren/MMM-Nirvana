@@ -6,7 +6,8 @@ nirvanaAPI.authenticate(conf.username,conf.password,function(response){
         if(data.error){
             console.error(data.error,data.sucess,data.err);
         }else{
-            console.info("OK", data.tasks);
+            console.info("OK", data.tasks.length,data.projects.length);
+            console.info("Next tasks", data.tasks.filter(x=>{ return x.state ==nirvanaAPI.TASK_STATE.NEXT}).length);
         }
     });
 });

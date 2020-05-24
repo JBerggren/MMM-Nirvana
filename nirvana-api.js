@@ -57,10 +57,7 @@ var nirvanaAPI = {
             for (var i = 0; i < data.results.length; i++) {
                 if (data.results[i].task) {
                     var task = data.results[i].task;
-                    if (task.state != this.TASK_STATE.NEXT) { //Only next items
-                        continue;
-                    }
-                    var myTask = { id: task.id, title: task.name, state: task.state, seq: task.seq }; //Get data we care about
+                    var myTask = task; 
                     if (task.type == this.TASK_TYPE.TASK) {
                         tasks.push(myTask);
                     } else if (task.type == this.TASK_TYPE.PROJECT) {
@@ -69,12 +66,19 @@ var nirvanaAPI = {
                 }
 
             }
-            tasks.sort(function (a, b) {
-                return a.seq - b.seq;
-            });
-            projects.sort(function (a, b) {
-                return a.seq - b.seq;
-            });
+            //setup parent projekt and project childs
+            for(var i=0;i<tasks.length;i++){
+                if(tasks[i].parentid != ""){
+                    var project = projects.find(x=>x.id == tasks[i].parentid);
+                    if(project){
+                        tasks[i].project = project;
+                        if(project.tasks== null){
+                            project.tasks = [];
+                        }
+                        project.tasks.push(tasks[i]);
+                    }
+                }
+            }
         }
         return { tasks: tasks, projects: projects };
     },
