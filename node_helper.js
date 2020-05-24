@@ -35,6 +35,7 @@ module.exports = NodeHelper.create({
                 return;
             }
             me.token = response;
+            callback();
         });
     },
 
@@ -80,6 +81,7 @@ module.exports = NodeHelper.create({
                 }
             }
         }
+        this.lastUpdate = Date.now();
         this.sendTaskList();
     },
     sendTaskList:function(){
