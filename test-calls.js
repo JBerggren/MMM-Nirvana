@@ -1,11 +1,31 @@
 const conf = require('./conf');
 const https = require('https')
 
-login(`method=auth.new&u=${conf.username}&p=${conf.password}`,function(success,data){
-    console.log(`After login. Ok:'${success}', data: '${data}'`);
-});
+login(conf.username,conf.password,function(token){
+    console.log("Login. Got token: " + token);
+})
 
-function login(dataString, callback) {
+function login(username,password, callback){
+    var token = "";
+    postToLogin(`method=auth.new&u=${username}&p=${password}`,function(success,dataString){
+        console.log(`After login. Ok:'${success}', data: '${dataString}'`);
+        if(success){
+            var data = JSON.parse(dataString);
+            if(data.results){
+                for(var i=0;i<data.results.length;i++){
+                    if(data.results[i].auth){
+                        token = data.results[i].auth.token;
+                        break;
+                    }
+                }
+            }
+        }
+        callback(token);
+    });
+    
+}
+
+function postToLogin(dataString, callback) {
     var options = {
         hostname: 'focus.nirvanahq.com',
         port: 443,
