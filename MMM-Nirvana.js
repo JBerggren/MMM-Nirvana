@@ -23,7 +23,11 @@ Module.register("MMM-Nirvana", {
         if (notification == "TASK_DATA") {
             this.tasks = payload;
             this.updateDom();
-        }else{
+        }else if(notification == "ERROR"){
+            //TODO: Handler
+            console.error(payload);
+        }
+            else{
             console.info("Msg from node_module",payload);
         }
     },

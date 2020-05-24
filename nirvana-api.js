@@ -3,7 +3,7 @@ const https = require('https');
 var nirvanaAPI = {
     authenticate: function (username, password, callback) {
         var me = this;
-        executeLoginRequest(username, password, function (success, dataString) {
+        me.executeLoginRequest(username, password, function (success, dataString) {
             try {
                 if (success) {
                     var token = me.parseLoginResult(dataString);
