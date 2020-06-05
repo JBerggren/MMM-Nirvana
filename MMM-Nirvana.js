@@ -6,7 +6,7 @@
 
 Module.register("MMM-Nirvana", {
     defaults: {
-        debug: true,
+        debug: false,
         username: '',
         password: '',
         numberOfTasks: 5,
@@ -70,6 +70,12 @@ Module.register("MMM-Nirvana", {
         }
         else {
             console.info("Msg from node_module", payload);
+        }
+    },
+
+    notificationReceived:function(notification,payload,sender){
+        if(notification == "UPDATE_NIRVANA"){
+            this.sendSocketNotification("GET_TASK_DATA");
         }
     },
 

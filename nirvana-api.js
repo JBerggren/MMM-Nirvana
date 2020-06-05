@@ -96,10 +96,10 @@ var nirvanaAPI = {
         var reqId = this.uuidv4();
         if (!since) {
             since = new Date();
+            since.setDate(since.getDate() - 30); //Limit to things updated latest month
         }
-        since.setDate(since.getDate() - 30); //Limit to things updated latest month
-        options.path = `/api/?api=rest&method=everything&requestid=${reqId}&since=${since.valueOf() / 1000}&clienttime=${Date.now() / 1000}&authtoken=${token}&appid=mmm-nirvana&appversion=001`;
-
+        
+        options.path = `/api/?api=rest&method=everything&requestid=${reqId}&since=${Math.floor(since.valueOf() / 1000)}&clienttime=${Math.floor(Date.now() / 1000)}&authtoken=${token}&appid=mmm-nirvana&appversion=001`;
         const req = https.request(options, res => {
             var body = '';
             res.on('data', d => {

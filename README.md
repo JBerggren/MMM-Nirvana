@@ -28,3 +28,16 @@ Used for showing tasks from [Nirvana GTD](https://www.nirvanahq.com/)
         ACTIVE_PROJECT: 11*/
 }
 ```
+
+
+Use together with [MMM-ModuleScheduler](https://github.com/ianperrin/MMM-ModuleScheduler) to setup schedule for updating task list. Example
+```
+ {
+      module: 'MMM-ModuleScheduler',
+      config: {
+        notification_schedule: [
+          { notification: 'UPDATE_NIRVANA', schedule: '* * * * *', payload: {} }
+        ]
+      }
+    },
+  ```

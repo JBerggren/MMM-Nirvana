@@ -22,6 +22,9 @@ module.exports = NodeHelper.create({
             this.getTasks();
             return;
         }
+        if(notification == "GET_TASK_DATA"){
+            this.getTasks();
+        }
     },
 
     getToken: function () {
@@ -56,6 +59,7 @@ module.exports = NodeHelper.create({
             nirvanaAPI.getData(me.token.token, me.lastUpdate, function (data) {
                 if (me.debug) {
                     me.log("Got data");
+                    me.log(JSON.stringify(data));
                 }
                 if (data.error) {
                     me.error(data.error);
@@ -81,7 +85,7 @@ module.exports = NodeHelper.create({
                 }
             }
         }
-        this.lastUpdate = Date.now();
+        this.lastUpdate = new Date();
         this.sendTaskList();
     },
     sendTaskList:function(){
